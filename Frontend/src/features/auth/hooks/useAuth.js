@@ -18,7 +18,10 @@ export const useAuth = () => {
             setUser(data.user)
             return data.user
         } catch (err) {
-            const message = err.response?.data?.message || "Login failed. Please try again."
+            let message = err.response?.data?.message || "Login failed. Please try again."
+            if (err.response?.data?.error) {
+                message += ` (Details: ${err.response.data.error})`
+            }
             setError(message)
             return null
         } finally {
@@ -34,7 +37,10 @@ export const useAuth = () => {
             setUser(data.user)
             return data.user
         } catch (err) {
-            const message = err.response?.data?.message || "Registration failed. Please try again."
+            let message = err.response?.data?.message || "Registration failed. Please try again."
+            if (err.response?.data?.error) {
+                message += ` (Details: ${err.response.data.error})`
+            }
             setError(message)
             return null
         } finally {

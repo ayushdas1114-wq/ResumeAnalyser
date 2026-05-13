@@ -12,6 +12,13 @@ async function registerUserController(req, res) {
     try {
         const { username, email, password } = req.body
 
+        if (!process.env.JWT_SECRET) {
+            console.error("JWT_SECRET is not defined in environment variables")
+            return res.status(500).json({
+                message: "Server configuration error: JWT_SECRET is missing."
+            })
+        }
+
         if (!username || !email || !password) {
             return res.status(400).json({
                 message: "Please provide username, email and password"
@@ -58,9 +65,10 @@ async function registerUserController(req, res) {
             }
         })
     } catch (error) {
-        console.error("Registration error:", error)
+        console.error("Registration error detail:", error)
         res.status(500).json({
-            message: "Registration failed. Internal server error."
+            message: "Registration failed. Internal server error.",
+            error: error.message
         })
     }
 }
@@ -74,6 +82,13 @@ async function registerUserController(req, res) {
 async function loginUserController(req, res) {
     try {
         const { email, password } = req.body
+
+        if (!process.env.JWT_SECRET) {
+            console.error("JWT_SECRET is not defined in environment variables")
+            return res.status(500).json({
+                message: "Server configuration error: JWT_SECRET is missing."
+            })
+        }
 
         const user = await userModel.findOne({ email })
 
@@ -113,9 +128,10 @@ async function loginUserController(req, res) {
             }
         })
     } catch (error) {
-        console.error("Login error:", error)
+        console.error("Login error detail:", error)
         res.status(500).json({
-            message: "Login failed. Internal server error."
+            message: "Login failed. Internal server error.",
+            error: error.message
         })
     }
 }

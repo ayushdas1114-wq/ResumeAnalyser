@@ -82,7 +82,7 @@ const Interview = () => {
     if (loading || !report) {
         return (
             <main className='loading-screen'>
-                <h1>Loading your interview plan...</h1>
+                <h1>Loading your resume analysis...</h1>
             </main>
         )
     }
@@ -105,7 +105,7 @@ const Interview = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
                     Back to Dashboard
                 </button>
-                <h2 className='interview-top-bar__title'>{report.title || 'Interview Plan'}</h2>
+                <h2 className='interview-top-bar__title'>{report.title || 'Resume Analysis'}</h2>
                 <button onClick={onLogout} className='top-bar__logout'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
                     Logout

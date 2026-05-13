@@ -83,7 +83,7 @@ const Home = () => {
             <div className='top-bar'>
                 <div className='top-bar__brand'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff2d78" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z" fill="#ff2d78"/></svg>
-                    <span>InterviewAI</span>
+                    <span>Resume Insight</span>
                 </div>
                 <div className='top-bar__right'>
                     <span className='top-bar__user'>
@@ -101,10 +101,10 @@ const Home = () => {
             <header className='page-header'>
                 <div className='page-header__badge'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z"/></svg>
-                    AI-Powered Strategy
+                    AI-Powered Analysis
                 </div>
-                <h1>Create Your Custom <span className='highlight'>Interview Plan</span></h1>
-                <p>Let our AI analyze the job requirements and your unique profile to build a winning strategy.</p>
+                <h1>Generate Your Custom <span className='highlight'>Resume Analysis</span></h1>
+                <p>Let our AI analyze the job requirements and your unique profile to build a winning resume.</p>
             </header>
 
             {/* Error Message */}
@@ -232,12 +232,12 @@ const Home = () => {
                         {generating ? (
                             <>
                                 <span className='generate-btn__spinner'></span>
-                                Generating Strategy...
+                                Generating Analysis...
                             </>
                         ) : (
                             <>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.6144 17.7956 11.492 15.7854C12.2731 13.9966 13.6789 12.5726 15.4325 11.7942L17.8482 10.7219C18.6162 10.381 18.6162 9.26368 17.8482 8.92277L15.5079 7.88394C13.7092 7.08552 12.2782 5.60881 11.5105 3.75894L10.6215 1.61673C10.2916.821765 9.19319.821767 8.8633 1.61673L7.97427 3.75892C7.20657 5.60881 5.77553 7.08552 3.97685 7.88394L1.63658 8.92277C.868537 9.26368.868536 10.381 1.63658 10.7219L4.0523 11.7942C5.80589 12.5726 7.21171 13.9966 7.99275 15.7854L8.8704 17.7956C9.20776 18.5682 10.277 18.5682 10.6144 17.7956Z"/></svg>
-                                Generate My Interview Strategy
+                                Generate My Resume Analysis
                             </>
                         )}
                     </button>
@@ -247,7 +247,7 @@ const Home = () => {
             {/* Recent Reports List */}
             {reports.length > 0 && (
                 <section className='recent-reports'>
-                    <h2>My Recent Interview Plans</h2>
+                    <h2>My Recent Resume Analyses</h2>
                     <ul className='reports-list'>
                         {reports.map(report => (
                             <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
@@ -272,7 +272,7 @@ const Home = () => {
 
             {/* Page Footer */}
             <footer className='page-footer'>
-                <span>© 2026 InterviewAI</span>
+                <span>© 2026 Resume Insight</span>
                 <div>
                     <a href='#'>Privacy</a>
                     <a href='#'>Terms</a>

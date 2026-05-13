@@ -13,7 +13,11 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: $bg-page;
+    background-color: $bg-page;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 60px 60px;
     position: relative;
     overflow: hidden;
 

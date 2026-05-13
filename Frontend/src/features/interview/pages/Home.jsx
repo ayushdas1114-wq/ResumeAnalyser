@@ -40,6 +40,11 @@ const Home = () => {
     const handleGenerateReport = async () => {
         setError(null)
 
+        if (!user) {
+            navigate('/login')
+            return
+        }
+
         if (!jobDescription.trim()) {
             setError("Please enter a job description.")
             return
@@ -86,14 +91,23 @@ const Home = () => {
                     <span>Resume Insight</span>
                 </div>
                 <div className='top-bar__right'>
-                    <span className='top-bar__user'>
-                        <span className='top-bar__avatar'>{user?.username?.charAt(0).toUpperCase()}</span>
-                        {user?.username}
-                    </span>
-                    <button onClick={onLogout} className='top-bar__logout'>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
-                        Logout
-                    </button>
+                    {user ? (
+                        <>
+                            <span className='top-bar__user'>
+                                <span className='top-bar__avatar'>{user.username?.charAt(0).toUpperCase()}</span>
+                                {user.username}
+                            </span>
+                            <button onClick={onLogout} className='top-bar__logout'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <div style={{ display: 'flex', gap: '0.8rem' }}>
+                            <button onClick={() => navigate('/login')} className='back-btn' style={{ margin: 0 }}>Login</button>
+                            <button onClick={() => navigate('/register')} className='back-btn' style={{ margin: 0, backgroundColor: 'rgba(255, 45, 120, 0.1)', borderColor: '#ff2d78', color: '#ff2d78' }}>Sign Up</button>
+                        </div>
+                    )}
                 </div>
             </div>
 

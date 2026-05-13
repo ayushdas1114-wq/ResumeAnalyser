@@ -28,7 +28,7 @@ const interviewReportSchema = z.object({
         day: z.number().describe("The day number in the preparation plan, starting from 1 up to 14"),
         focus: z.string().describe("The main focus of this day in the preparation plan, e.g. data structures, system design, mock interviews etc."),
         tasks: z.array(z.string()).describe("List of tasks to be done on this day to follow the preparation plan, e.g. read a specific book or article, solve a set of problems, watch a video etc.")
-    })).describe("A 14-day (2-week) day-wise preparation plan for the candidate to follow in order to prepare for the interview effectively. Must contain exactly 14 days."),
+    })).length(14).describe("A 14-day (2-week) day-wise preparation plan for the candidate to follow in order to prepare for the interview effectively. Must contain exactly 14 days, Day 1 to Day 14."),
     title: z.string().describe("The title of the job for which the interview report is generated"),
 })
 
@@ -40,7 +40,7 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                         Self Description: ${selfDescription}
                         Job Description: ${jobDescription}
 
-                        IMPORTANT: The preparationPlan MUST be a detailed 14-day (2-week) plan. Each day should have a unique focus area and 3-5 actionable tasks. Structure it as:
+                        IMPORTANT: The preparationPlan MUST be a detailed 14-day (2-week) plan. You MUST generate exactly 14 separate entries, from Day 1 to Day 14. Do NOT group days (e.g. "Day 1-3"). Each individual day must have a unique focus area and 3-5 actionable tasks. Structure it as:
                         - Week 1 (Days 1-7): Focus on core technical skills, fundamentals, and knowledge gaps
                         - Week 2 (Days 8-14): Focus on advanced topics, system design, mock interviews, and behavioral preparation
 `

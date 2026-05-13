@@ -12,6 +12,14 @@ async function connectToDB() {
     try {
         await mongoose.connect(process.env.MONGO_URI)
         console.log("Connected to Database")
+        
+        // Attempt to drop the unique username index if it exists from previous deployments
+        try {
+            await mongoose.connection.collection('users').dropIndex('username_1')
+            console.log("Dropped legacy unique username index")
+        } catch (indexErr) {
+            // Ignore if index doesn't exist
+        }
     }
     catch (err) {
         console.error("Database connection error:", err.message)

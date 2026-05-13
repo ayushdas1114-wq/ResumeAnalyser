@@ -134,6 +134,13 @@ const Home = () => {
 
             {/* Main Card */}
             <div className='interview-card'>
+                {!user && (
+                    <div 
+                        className="auth-overlay" 
+                        onClick={() => navigate('/login')}
+                        title="Please log in to use these features"
+                    />
+                )}
                 <div className='interview-card__body'>
 
                     {/* Left Panel - Job Description */}

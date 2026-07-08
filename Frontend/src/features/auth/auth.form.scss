@@ -72,6 +72,12 @@ main {
         font-weight: 800;
         color: $text-primary;
         letter-spacing: -0.02em;
+        cursor: pointer;
+        transition: opacity 0.2s ease;
+        
+        &:hover {
+            opacity: 0.8;
+        }
         
         svg {
             width: 28px;

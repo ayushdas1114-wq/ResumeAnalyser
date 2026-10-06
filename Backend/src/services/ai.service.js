@@ -36,6 +36,30 @@ const interviewReportSchema = z.object({
     title: z.string().describe("The title of the job for which the interview report is generated"),
 })
 
+const CANDIDATE_MODELS = [
+    process.env.GEMINI_MODEL,
+    "gemini-3.5-flash",
+    "gemini-3-flash-preview",
+    "gemini-3.5-flash-lite"
+].filter(Boolean)
+
+async function callGenAIWithFallback(ai, options) {
+    let lastError = null
+    for (const model of CANDIDATE_MODELS) {
+        try {
+            const response = await ai.models.generateContent({
+                ...options,
+                model
+            })
+            return response
+        } catch (err) {
+            console.warn(`Gemini model ${model} failed (${err.message}). Trying next fallback...`)
+            lastError = err
+        }
+    }
+    throw lastError || new Error("All candidate Gemini models failed.")
+}
+
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
     const ai = getGenAI()
 
@@ -49,29 +73,13 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                         - Week 2 (Days 8-14): Focus on advanced topics, system design, mock interviews, and behavioral preparation
 `
 
-    let response
-    const primaryModel = process.env.GEMINI_MODEL || "gemini-3-flash-preview"
-
-    try {
-        response = await ai.models.generateContent({
-            model: primaryModel,
-            contents: prompt,
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: zodToJsonSchema(interviewReportSchema),
-            }
-        })
-    } catch (err) {
-        console.warn(`Primary Gemini model (${primaryModel}) failed: ${err.message}. Retrying with gemini-2.5-flash...`)
-        response = await ai.models.generateContent({
-            model: "gemini-2.5-flash",
-            contents: prompt,
-            config: {
-                responseMimeType: "application/json",
-                responseSchema: zodToJsonSchema(interviewReportSchema),
-            }
-        })
-    }
+    const response = await callGenAIWithFallback(ai, {
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: zodToJsonSchema(interviewReportSchema),
+        }
+    })
 
     let cleanText = (response.text || "").trim()
     if (cleanText.startsWith("```json")) {
@@ -138,8 +146,7 @@ async function generateResumePdf({ resume, selfDescription, jobDescription }) {
                         The resume should not be so lengthy, it should ideally be 1-2 pages long when converted to PDF. Focus on quality rather than quantity and make sure to include all the relevant information that can increase the candidate's chances of getting an interview call for the given job description.
                     `
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+    const response = await callGenAIWithFallback(ai, {
         contents: prompt,
         config: {
             responseMimeType: "application/json",

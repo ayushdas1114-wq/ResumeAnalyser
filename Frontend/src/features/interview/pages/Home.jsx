@@ -62,7 +62,11 @@ const Home = () => {
                 navigate(`/interview/${data._id}`)
             }
         } catch (err) {
-            setError(err.response?.data?.message || "Failed to generate report. Please try again.")
+            let message = err.response?.data?.message || "Failed to generate report. Please try again."
+            if (err.response?.data?.error) {
+                message += ` (Details: ${err.response.data.error})`
+            }
+            setError(message)
         } finally {
             setGenerating(false)
         }

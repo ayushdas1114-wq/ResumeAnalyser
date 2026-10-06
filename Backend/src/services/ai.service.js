@@ -3,9 +3,13 @@ const { z } = require("zod")
 const { zodToJsonSchema } = require("zod-to-json-schema")
 const puppeteer = require("puppeteer")
 
-const ai = new GoogleGenAI({
-    apiKey: process.env.GOOGLE_GENAI_API_KEY
-})
+function getGenAI() {
+    const apiKey = process.env.GOOGLE_GENAI_API_KEY
+    if (!apiKey) {
+        throw new Error("GOOGLE_GENAI_API_KEY is not defined in environment variables on your server.")
+    }
+    return new GoogleGenAI({ apiKey })
+}
 
 
 const interviewReportSchema = z.object({
@@ -33,7 +37,7 @@ const interviewReportSchema = z.object({
 })
 
 async function generateInterviewReport({ resume, selfDescription, jobDescription }) {
-
+    const ai = getGenAI()
 
     const prompt = `Generate a comprehensive interview report for a candidate with the following details:
                         Resume: ${resume}
@@ -45,18 +49,41 @@ async function generateInterviewReport({ resume, selfDescription, jobDescription
                         - Week 2 (Days 8-14): Focus on advanced topics, system design, mock interviews, and behavioral preparation
 `
 
-    const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
-        contents: prompt,
-        config: {
-            responseMimeType: "application/json",
-            responseSchema: zodToJsonSchema(interviewReportSchema),
-        }
-    })
+    let response
+    const primaryModel = process.env.GEMINI_MODEL || "gemini-3-flash-preview"
 
-    return JSON.parse(response.text)
+    try {
+        response = await ai.models.generateContent({
+            model: primaryModel,
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: zodToJsonSchema(interviewReportSchema),
+            }
+        })
+    } catch (err) {
+        console.warn(`Primary Gemini model (${primaryModel}) failed: ${err.message}. Retrying with gemini-2.5-flash...`)
+        response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: prompt,
+            config: {
+                responseMimeType: "application/json",
+                responseSchema: zodToJsonSchema(interviewReportSchema),
+            }
+        })
+    }
 
+    let cleanText = (response.text || "").trim()
+    if (cleanText.startsWith("```json")) {
+        cleanText = cleanText.slice(7)
+    } else if (cleanText.startsWith("```")) {
+        cleanText = cleanText.slice(3)
+    }
+    if (cleanText.endsWith("```")) {
+        cleanText = cleanText.slice(0, -3)
+    }
 
+    return JSON.parse(cleanText.trim())
 }
 
 

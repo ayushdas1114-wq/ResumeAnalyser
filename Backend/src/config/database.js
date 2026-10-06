@@ -23,6 +23,11 @@ async function connectToDB() {
     }
     catch (err) {
         console.error("Database connection error:", err.message)
+        if (err.message && err.message.includes("ENOTFOUND")) {
+            console.error("\n[MongoDB Atlas Tip]: Cluster domain not found.")
+            console.error("1. Check if your MongoDB Atlas cluster is PAUSED (log into https://cloud.mongodb.com and click 'Resume').")
+            console.error("2. If your cluster was recreated, update MONGO_URI in Backend/.env with the new connection string.\n")
+        }
     }
 }
 
